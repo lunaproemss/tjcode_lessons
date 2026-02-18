@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TJ CODEE — Амалияи HTML ва CSS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 900;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav a {
+            color: #667eea;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav a:hover {
+            color: #764ba2;
+        }
+
+        .header-contacts a {
+            color: #667eea;
+            font-size: 20px;
+            margin-left: 15px;
+            transition: 0.3s;
+        }
+
+        .header-contacts a:hover {
+            color: #764ba2;
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            color: white;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .lessons-sidebar {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .lessons-sidebar h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .lesson-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .lesson-item {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .lesson-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.2);
+        }
+
+        .lesson-item.active {
+            border-color: #667eea;
+            background: #f0f3ff;
+        }
+
+        .lesson-item h3 {
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .lesson-item p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .lesson-tag {
+            background: #e0e7ff;
+            color: #667eea;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: inline-block;
+        }
+
+        .lesson-description {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .lesson-description h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 28px;
+        }
+
+        .lesson-description p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .task-box {
+            background: #f0f3ff;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .task-box h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .task-box ul {
+            margin-left: 20px;
+            color: #555;
+        }
+
+        .editor-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 40px;
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        @media (max-width: 768px) {
+            .editor-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .editor-section {
+            background: #1e1e2f;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .editor-header {
+            background: #2d2d44;
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .editor-header span {
+            color: #33ccff;
+        }
+
+        .run-btn {
+            background: #33ccff;
+            border: none;
+            color: white;
+            padding: 6px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .run-btn:hover {
+            background: #2aa8d4;
+            transform: scale(1.05);
+        }
+
+        textarea {
+            width: 100%;
+            height: 400px;
+            background: #1e1e2f;
+            border: none;
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            padding: 20px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        textarea:focus {
+            outline: none;
+        }
+
+        .preview-section {
+            background: #f5f5f5;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .preview-header {
+            background: #2d2d44;
+            color: white;
+            padding: 12px 20px;
+        }
+
+        .preview-frame {
+            height: 400px;
+            background: white;
+            padding: 20px;
+            overflow: auto;
+        }
+
+        #preview {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: white;
+        }
+
+        .hint-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+
+        .hint-box h3 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        .hint-box p {
+            color: #856404;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 900;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            color: white;
+            margin-top: 50px;
+        }
+
+        .footer-links a {
+            color: white;
+            margin: 0 10px;
+            font-size: 20px;
+            opacity: 0.8;
+            transition: 0.3s;
+        }
+
+        .footer-links a:hover {
+            opacity: 1;
+            transform: translateY(-2px);
+        }
+        /* Информация о тегах */
+.tags-info {
+    background: #f8f9fa;
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px 0;
+    border: 1px solid #e0e7ff;
+}
+
+.tags-info h3 {
+    color: #667eea;
+    margin-bottom: 15px;
+    font-size: 20px;
+}
+
+.tag-card {
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-left: 4px solid #667eea;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.tag-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #764ba2;
+    margin-bottom: 8px;
+}
+
+.tag-name code {
+    background: #f0f3ff;
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.tag-desc {
+    color: #555;
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
+.tag-example {
+    background: #1e1e2f;
+    color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+}
+
+.tag-example pre {
+    margin: 5px 0 0 0;
+    white-space: pre-wrap;
+}
+
+.tag-example code {
+    color: #33ccff;
+}
+
+/* Правила */
+.rules-box {
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+}
+
+.rules-box h3 {
+    color: #856404;
+    margin-bottom: 10px;
+}
+
+.rules-box ul {
+    color: #856404;
+    margin-left: 20px;
+}
+
+.rules-box li {
+    margin-bottom: 5px;
+}
+
+.rules-box code {
+    background: #fff;
+    padding: 2px 5px;
+    border-radius: 4px;
+    color: #d63384;
+}
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">TJ CODE</div>
+        <nav class="nav">
+            <a href="#home">Асосӣ</a>
+            <a href="#lessons">Дарсҳо</a>
+            <a href="#contacts">Контактҳо</a>
+        </nav>
+        <div class="header-contacts">
+            <a href="https://t.me/tj_codee" target="_blank"><i class="fab fa-telegram"></i></a>
+            <a href="https://www.instagram.com/tj_codee" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.youtube.com/@tj_codee" target="_blank"><i class="fab fa-youtube"></i></a>
+            <a href="https://github.com/lunaproemss" target="_blank"><i class="fab fa-github"></i></a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="hero" id="home">
+            <h1>📚 Амалияи HTML ва CSS</h1>
+            <p>Дарсҳо, тапшриқҳо ва редактори кода дар як ҷо</p>
+        </div>
+
+        <div class="lessons-sidebar" id="lessons">
+            <h2><i class="fas fa-book-open" style="margin-right: 10px;"></i>Дарсҳои HTML ва CSS</h2>
+            <div class="lesson-list">
+                <div class="lesson-item active" onclick="showLesson(1)">
+                    <h3>Дарси 1: Сохтори HTML</h3>
+                    <p>Тегҳои асосӣ: h1, p, div</p>
+                    <span class="lesson-tag">Оддӣ</span>
+                </div>
+                <div class="lesson-item" onclick="showLesson(2)">
+                    <h3>Дарси 2: Матн ва пайвандҳо</h3>
+                    <p>Тегҳо барои матн, ссылкаҳо</p>
+                    <span class="lesson-tag">Оддӣ</span>
+                </div>
+                <div class="lesson-item" onclick="showLesson(3)">
+                    <h3>Дарси 3: Рӯйхатҳо ва ҷадвалҳо</h3>
+                    <p>ul, ol, li, table</p>
+                    <span class="lesson-tag">Миёна</span>
+                </div>
+                <div class="lesson-item" onclick="showLesson(4)">
+                    <h3>Дарси 4: Ворид кардани CSS</h3>
+                    <p>Ранг, фон, ченакҳо</p>
+                    <span class="lesson-tag">Миёна</span>
+                </div>
+                <div class="lesson-item" onclick="showLesson(5)">
+                    <h3>Дарси 5: Flexbox</h3>
+                    <p>Ҷойгиркунии блокҳо</p>
+                    <span class="lesson-tag">Мураккаб</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Контейнер для уроков -->
+        <div id="lesson-container">
+            <!-- Дарси 1 -->
+            <div class="lesson-description" id="lesson1">
+                <h2>Дарси 1: Сохтори HTML</h2>
+                <p>Дар ин дарс мо бо тегҳои асосии HTML шинос мешавем. HTML монанди скелети сайт аст — он сохторро муайян мекунад.</p>
+                
+                <div class="tags-info">
+                    <h3>🏷 Тегҳои асосӣ:</h3>
+                    
+                    <div class="tag-card">
+                        <div class="tag-name"><code>&lt;h1&gt; &lt;/h1&gt;</code></div>
+                        <div class="tag-desc">Сарлавҳаи калонтарин. Дар саҳифа фақат як маротиба истифода мешавад.</div>
+                        <div class="tag-example">
+                            <strong>Мисол:</strong> 
+                            <pre><code>&lt;h1&gt;Салом, Ҷаҳон!&lt;/h1&gt;</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="tag-card">
+                        <div class="tag-name"><code>&lt;h2&gt; &lt;/h2&gt;</code></div>
+                        <div class="tag-desc">Сарлавҳаи дараҷаи дуюм. Барои зербахшҳо истифода мешавад.</div>
+                        <div class="tag-example">
+                            <strong>Мисол:</strong> 
+                            <pre><code>&lt;h2&gt;Хуш омадед&lt;/h2&gt;</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="tag-card">
+                        <div class="tag-name"><code>&lt;p&gt; &lt;/p&gt;</code></div>
+                        <div class="tag-desc">Параграф — барои матнҳои оддӣ.</div>
+                        <div class="tag-example">
+                            <strong>Мисол:</strong> 
+                            <pre><code>&lt;p&gt;Ин матни параграф аст.&lt;/p&gt;</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="tag-card">
+                        <div class="tag-name"><code>&lt;div&gt; &lt;/div&gt;</code></div>
+                        <div class="tag-desc">Блок — барои ҷудо кардани қисмҳои сайт.</div>
+                        <div class="tag-example">
+                            <strong>Мисол:</strong> 
+                            <pre><code>&lt;div&gt;Матн дар дохили блок&lt;/div&gt;</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rules-box">
+                    <h3>📌 Қоидаҳои HTML:</h3>
+                    <ul>
+                        <li>Ҳар тег бо <code>&lt;</code> оғоз мешавад ва бо <code>&gt;</code> баста мешавад</li>
+                        <li>Тегҳои кушодашаванда: <code>&lt;h1&gt;</code></li>
+                        <li>Тегҳои басташаванда: <code>&lt;/h1&gt;</code></li>
+                        <li>Баъзе тегҳо худбаста мешаванд: <code>&lt;br&gt;</code> ё <code>&lt;img&gt;</code></li>
+                    </ul>
+                </div>
+                
+                <div class="task-box">
+                    <h3>📝 Супориш:</h3>
+                    <p>Дар редактори код дар тарафи чап, HTML-и худро нависед. Кӯшиш кунед, ки саҳифае созед, ки дорои:</p>
+                    <ul>
+                        <li>Сарлавҳаи калон (h1)</li>
+                        <li>Сарлавҳаи хурд (h2)</li>
+                        <li>Параграф (p)</li>
+                        <li>Як блок (div)</li>
+                    </ul>
+                    <p>Тугмаи "Run" -ро пахш кунед, то натиҷаро бубинед.</p>
+                </div>
+            </div>
+
+            <!-- Дарси 2 -->
+            <div class="lesson-description" id="lesson2" style="display:none;">
+                <h2>Дарси 2: Матн ва пайвандҳо</h2>
+                <p>Дар ин дарс мо тегҳои матнӣ ва пайвандҳоро меомӯзем. Тегҳо барои форматкунии матн ва сохтани ссылкаҳо истифода мешаванд.</p>
+                
+                <div class="tags-info">
+                    <h3>🏷 Тегҳои асосӣ:</h3>
+                    
+                    <div class="tag-card">
+                        <div class="tag-name"><code>&lt;strong&gt; &lt;/strong&gt;</code></div>
+                        <div class="tag-desc">Матни ғафс. Барои муҳим кардани матн.</div>
+                        <div class="tag-example">
+                            <strong>Мисол:</strong> 
+                            <pre><code>&lt;strong&gt;Матни муҳим&lt;/strong&gt;</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="tag-card">
+                        <div class="tag-name"><code>&lt;em&gt; &lt;/em&gt;</code></div>
+                        <div class="tag-desc">Матни курсив. Барои таъкид.</div>
+                        <div class="tag-example">
+                            <strong>Мисол:</strong> 
+                            <pre><code>&lt;em&gt;Матни моил&lt;/em&gt;</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="tag-card">
+                        <div class="tag-name"><code>&lt;a&gt; &lt;/a&gt;</code></div>
+                        <div class="tag-desc">Пайванд ба дигар саҳифа.</div>
+                        <div class="tag-example">
+                            <strong>Мисол:</strong> 
+                            <pre><code>&lt;a href="https://youtube.com"&gt;YouTube&lt;/a&gt;</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="tag-card">
+                        <div class="tag-name"><code>&lt;br&gt;</code></div>
+                        <div class="tag-desc">Сатри нав. Худбаста мешавад.</div>
+                        <div class="tag-example">
+                            <strong>Мисол:</strong> 
+                            <pre><code>Сатри аввал&lt;br&gt;Сатри дуюм</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rules-box">
+                    <h3>📌 Қоидаҳо:</h3>
+                    <ul>
+                        <li><code>&lt;strong&gt;</code> — матни ғафс</li>
+                        <li><code>&lt;em&gt;</code> — матни курсив</li>
+                        <li><code>&lt;a href="..."&gt;</code> — пайванд</li>
+                        <li><code>&lt;br&gt;</code> — сатри нав</li>
+                    </ul>
+                </div>
+                
+                <div class="task-box">
+                    <h3>📝 Супориш:</h3>
+                    <p>Дар редактори код дар тарафи чап, HTML-и худро нависед. Кӯшиш кунед, ки саҳифае созед, ки дорои:</p>
+                    <ul>
+                        <li>Матни ғафс (strong)</li>
+                        <li>Матни курсив (em)</li>
+                        <li>Пайванд ба YouTube-и шумо (a)</li>
+                    </ul>
+                    <p>Тугмаи "Run" -ро пахш кунед, то натиҷаро бубинед.</p>
+                </div>
+            </div>
+
+            <!-- Дарси 3 -->
+            <div class="lesson-description" id="lesson3" style="display:none;">
+                <h2>Дарси 3: Рӯйхатҳо ва ҷадвалҳо</h2>
+                <p>Дар ин дарс мо рӯйхатҳо ва ҷадвалҳоро меомӯзем. Рӯйхатҳо барои нишон додани иттилоот дар шакли мураттаб ва ҷадвалҳо барои нишон додани маълумот дар сатрҳо ва сутунҳо истифода мешаванд.</p>
+                
+                <div class="tags-info">
+                    <h3>🏷 Тегҳои асосӣ:</h3>
+                    
+                    <div class="tag-card">
+                        <div class="tag-name"><code>&lt;ul&gt; &lt;/ul&gt;</code></div>
+                        <div class="tag-desc">Рӯйхати беномер (бо нуқтаҳо).</div>
+                        <div class="tag-example">
+                            <strong>Мисол:</strong> 
+                            <pre><code>&lt;ul&gt;
+  &lt;li&gt;Python&lt;/li&gt;
+  &lt;li&gt;HTML&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="tag-card">
+                        <div class="tag-name"><code>&lt;ol&gt; &lt;/ol&gt;</code></div>
+                        <div class="tag-desc">Рӯйхати рақамгузорӣшуда.</div>
+                        <div class="tag-example">
+                            <strong>Мисол:</strong> 
+                            <pre><code>&lt;ol&gt;
+  &lt;li&gt;Аввал&lt;/li&gt;
+  &lt;li&gt;Дуюм&lt;/li&gt;
+&lt;/ol&gt;</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="tag-card">
+                        <div class="tag-name"><code>&lt;li&gt; &lt;/li&gt;</code></div>
+                        <div class="tag-desc">Элементи рӯйхат.</div>
+                        <div class="tag-example">
+                            <strong>Мисол:</strong> 
+                            <pre><code>&lt;li&gt;Элемент&lt;/li&gt;</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="tag-card">
+                        <div class="tag-name"><code>&lt;table&gt; &lt;/table&gt;</code></div>
+                        <div class="tag-desc">Ҷадвал.</div>
+                        <div class="tag-example">
+                            <strong>Мисол:</strong> 
+                            <pre><code>&lt;table border="1"&gt;
+  &lt;tr&gt;
+    &lt;td&gt;1&lt;/td&gt;
+    &lt;td&gt;2&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rules-box">
+                    <h3>📌 Қоидаҳо:</h3>
+                    <ul>
+                        <li><code>&lt;ul&gt;</code> — рӯйхати беномер</li>
+                        <li><code>&lt;ol&gt;</code> — рӯйхати рақамгузорӣшуда</li>
+                        <li><code>&lt;li&gt;</code> — элементи рӯйхат</li>
+                        <li><code>&lt;table&gt;</code> — ҷадвал</li>
+                    </ul>
+                </div>
+                
+                <div class="task-box">
+                    <h3>📝 Супориш:</h3>
+                    <p>Дар редактори код дар тарафи чап, HTML-и худро нависед. Кӯшиш кунед, ки саҳифае созед, ки дорои:</p>
+                    <ul>
+                        <li>Рӯйхати беномер (ul) бо 3 элемент</li>
+                        <li>Ҷадвали 2x2 бо рақамҳо</li>
+                    </ul>
+                    <p>Тугмаи "Run" -ро пахш кунед, то натиҷаро бубинед.</p>
+                </div>
+            </div>
+
+            <!-- Дарси 4 -->
+            <div class="lesson-description" id="lesson4" style="display:none;">
+                <h2>Дарси 4: Ворид кардани CSS</h2>
+                <p>CSS барои ороиши сайт истифода мешавад. Бо ёрии CSS шумо метавонед ранг, андоза ва ҷойгиршавии элементҳоро идора кунед.</p>
+                
+                <div class="tags-info">
+                    <h3>🏷 Хусусиятҳои CSS:</h3>
+                    
+                    <div class="tag-card">
+                        <div class="tag-name"><code>color</code></div>
+                        <div class="tag-desc">Ранги матнро иваз мекунад.</div>
+                        <div class="tag-example">
+                            <strong>Мисол:</strong> 
+                            <pre><code>color: red;
+color: blue;</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="tag-card">
+                        <div class="tag-name"><code>background-color</code></div>
+                        <div class="tag-desc">Ранги фонро иваз мекунад.</div>
+                        <div class="tag-example">
+                            <strong>Мисол:</strong> 
+                            <pre><code>background-color: yellow;</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="tag-card">
+                        <div class="tag-name"><code>font-size</code></div>
+                        <div class="tag-desc">Андозаи матнро дигар мекунад.</div>
+                        <div class="tag-example">
+                            <strong>Мисол:</strong> 
+                            <pre><code>font-size: 24px;</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="tag-card">
+                        <div class="tag-name"><code>text-align</code></div>
+                        <div class="tag-desc">Матнро марказ, чап ё рост мекунад.</div>
+                        <div class="tag-example">
+                            <strong>Мисол:</strong> 
+                            <pre><code>text-align: center;</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rules-box">
+                    <h3>📌 Қоидаҳо:</h3>
+                    <ul>
+                        <li>CSS-ро дар <code>&lt;style&gt;</code> нависед</li>
+                        <li>Барои h1: <code>h1 { color: red; }</code></li>
+                        <li>Рангҳо: red, blue, green, yellow</li>
+                    </ul>
+                </div>
+                
+                <div class="task-box">
+                    <h3>📝 Супориш:</h3>
+                    <p>Дар редактори код HTML ва CSS-и худро нависед. Кӯшиш кунед, ки:</p>
+                    <ul>
+                        <li>Сарлавҳаи h1-ро сурх кунед</li>
+                        <li>Матни параграфро кабуд кунед</li>
+                    </ul>
+                    <p>Тугмаи "Run" -ро пахш кунед, то натиҷаро бубинед.</p>
+                </div>
+            </div>
+
+            <!-- Дарси 5 -->
+            <div class="lesson-description" id="lesson5" style="display:none;">
+                <h2>Дарси 5: Flexbox</h2>
+                <p>Flexbox як усули муосири ҷойгиркунии блокҳо дар саҳифа аст.</p>
+                
+                <div class="tags-info">
+                    <h3>🏷 Хусусиятҳои Flexbox:</h3>
+                    
+                    <div class="tag-card">
+                        <div class="tag-name"><code>display: flex;</code></div>
+                        <div class="tag-desc">Контейнерро flex мекунад.</div>
+                        <div class="tag-example">
+                            <strong>Мисол:</strong> 
+                            <pre><code>.container {
+    display: flex;
+}</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="tag-card">
+                        <div class="tag-name"><code>justify-content</code></div>
+                        <div class="tag-desc">Ҷойгиркунии уфуқӣ.</div>
+                        <div class="tag-example">
+                            <strong>Мисол:</strong> 
+                            <pre><code>justify-content: center;</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="tag-card">
+                        <div class="tag-name"><code>gap</code></div>
+                        <div class="tag-desc">Фосила байни блокҳо.</div>
+                        <div class="tag-example">
+                            <strong>Мисол:</strong> 
+                            <pre><code>gap: 20px;</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rules-box">
+                    <h3>📌 Қоидаҳо:</h3>
+                    <ul>
+                        <li>Ба контейнер <code>display: flex;</code> диҳед</li>
+                        <li><code>justify-content: center</code> — ба марказ меорад</li>
+                        <li><code>gap: 20px</code> — фосила байни блокҳо</li>
+                    </ul>
+                </div>
+                
+                <div class="task-box">
+                    <h3>📝 Супориш:</h3>
+                    <p>Дар редактори код HTML ва CSS-и худро нависед. Созед 3 блок дар як сатр.</p>
+                    <p>Тугмаи "Run" -ро пахш кунед, то натиҷаро бубинед.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="editor-container">
+            <div class="editor-section">
+                <div class="editor-header">
+                    <span><i class="fas fa-code"></i> HTML</span>
+                    <button class="run-btn" onclick="updatePreview()"><i class="fas fa-play"></i> Run</button>
+                </div>
+                <textarea id="htmlCode" placeholder="HTML коди нависед..."></textarea>
+            </div>
+            <div class="preview-section">
+                <div class="preview-header">
+                    <span><i class="fas fa-eye"></i> Натиҷа</span>
+                </div>
+                <div class="preview-frame">
+                    <iframe id="preview"></iframe>
+                </div>
+            </div>
+        </div>
+
+        <div class="hint-box" id="hint-box">
+            <h3>💡 Маслиҳат:</h3>
+            <p id="hint-text"></p>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number">2,500+</div>
+                <div class="stat-label">Обунаҳо</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">5</div>
+                <div class="stat-label">Дарсҳо</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">150+</div>
+                <div class="stat-label">Донишҷӯён</div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer" id="contacts">
+        <p>© 2024 TJ CODEE — Омӯзиши программирование ба тоҷикӣ</p>
+        <div class="footer-links">
+            <a href="https://t.me/tj_codee" target="_blank"><i class="fab fa-telegram"></i></a>
+            <a href="https://www.instagram.com/tj_codee" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.youtube.com/@tj_codee" target="_blank"><i class="fab fa-youtube"></i></a>
+            <a href="https://github.com/lunaproemss" target="_blank"><i class="fab fa-github"></i></a>
+        </div>
+    </footer> 
+    <script src="script.js"></script>
+</body>
+</html>
