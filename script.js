@@ -2,59 +2,133 @@
 // СИСТЕМА ПЛАТНОГО ДОСТУПА ДЛЯ TJ CODE
 // ====================================
 
-// 1. НАСТРОЙКИ (измени под себя)
+// 1. НАСТРОЙКИ
 const SECRET_KEYS = [
-    'tj2026-01', // ключ для первого ученика
-    'tj2026-02', // для второго
-    'tj2026-03',
-    'tj2026-04',
-    'tj2026-05',
-    'tj2026-06',
-    'tj2026-07',
-    'tj2026-08',
-    'tj2026-09',
-    'tj2026-10',
-    'tjcode-pro',
-    'html-master'
+    'tj2026-01', 'tj2026-02', 'tj2026-03', 'tj2026-04', 'tj2026-05',
+    'tj2026-06', 'tj2026-07', 'tj2026-08', 'tj2026-09', 'tj2026-10',
+    'tjcode-pro', 'html-master'
 ];
-const TOTAL_LESSONS = 5; // Сколько всего уроков
+const TOTAL_LESSONS = 5;
 
-// 2. Функция проверки доступа (главная)
-function checkAccessAndLock() {
-    // Сначала проверяем, есть ли уже доступ в браузере
-    let hasAccess = localStorage.getItem('tjcode_paid');
+// ====================================
+// ФУНКЦИИ УРОКОВ (ОСНОВНЫЕ)
+// ====================================
+
+function updatePreview() {
+    const htmlCode = document.getElementById('htmlCode')?.value || '';
+    const preview = document.getElementById('preview');
+    if (!preview) return;
     
-    // Если доступа нет, смотрим на ключ в URL
+    const styledHtml = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <style>
+                body { font-family: Arial, sans-serif; padding: 20px; line-height: 1.6; }
+                h1 { color: #667eea; }
+                h2 { color: #764ba2; }
+            </style>
+        </head>
+        <body>
+            ${htmlCode}
+        </body>
+        </html>
+    `;
+    preview.srcdoc = styledHtml;
+}
+
+// ГЛАВНАЯ ФУНКЦИЯ ПОКАЗА УРОКОВ
+function showLesson(lessonNumber) {
+    console.log('showLesson вызван для урока', lessonNumber);
+    
+    // Проверка доступа (кроме первого урока)
+    if (lessonNumber > 1) {
+        const hasAccess = localStorage.getItem('tjcode_paid');
+        if (!hasAccess) {
+            alert('🔒 Ин дарс танҳо барои харидорони курс дастрас аст!');
+            return;
+        }
+    }
+
+    // Скрываем все уроки
+    for (let i = 1; i <= TOTAL_LESSONS; i++) {
+        const lesson = document.getElementById('lesson' + i);
+        if (lesson) lesson.style.display = 'none';
+    }
+
+    // Показываем нужный
+    const currentLesson = document.getElementById('lesson' + lessonNumber);
+    if (currentLesson) {
+        currentLesson.style.display = 'block';
+    } else {
+        console.error('Урок с id lesson' + lessonNumber + ' не найден');
+    }
+
+    // Обновляем подсказку
+    const hints = {
+        1: 'Тегҳои HTML бо қавсҳои кунҷак кушода ва баста мешаванд',
+        2: 'Барои пайванд аз href истифода баред',
+        3: 'Барои ҷадвал: table, tr, td',
+        4: 'Аз style истифода баред',
+        5: 'display: flex; ва justify-content: center;'
+    };
+    const hintEl = document.getElementById('hint-text');
+    if (hintEl) hintEl.innerHTML = hints[lessonNumber] || '';
+
+    // Обновляем код в редакторе
+    const codes = {
+        1: '<h1>Салом, Ҷаҳон!</h1>\n<h2>Ин сарлавҳаи хурд аст</h2>\n<p>Ин параграф аст.</p>\n<div>Ин блок аст</div>',
+        2: '<p>Ин <strong>матини ғафс</strong> аст.</p>\n<p>Ин <em>матини курсив</em> аст.</p>\n<a href="https://youtube.com/@tj_codee">YouTube канали мо</a>',
+        3: '<h3>Рӯйхат:</h3>\n<ul>\n  <li>Python</li>\n  <li>HTML</li>\n  <li>CSS</li>\n</ul>\n\n<h3>Ҷадвал:</h3>\n<table border="1">\n  <tr>\n    <td>1</td>\n    <td>2</td>\n  </tr>\n  <tr>\n    <td>3</td>\n    <td>4</td>\n  </tr>\n</table>',
+        4: '<style>\n  h1 { color: red; }\n  p { color: blue; }\n</style>\n\n<h1>Сарлавҳаи сурх</h1>\n<p>Матни кабуд</p>',
+        5: '<style>\n  .container {\n    display: flex;\n    justify-content: center;\n    gap: 20px;\n  }\n  .box {\n    width: 100px;\n    height: 100px;\n    background: #667eea;\n    color: white;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n  }\n</style>\n\n<div class="container">\n  <div class="box">1</div>\n  <div class="box">2</div>\n  <div class="box">3</div>\n</div>'
+    };
+    const htmlEl = document.getElementById('htmlCode');
+    if (htmlEl) htmlEl.value = codes[lessonNumber] || '';
+
+    // Активный класс
+    document.querySelectorAll('.lesson-item').forEach((item, index) => {
+        if (index + 1 === lessonNumber) item.classList.add('active');
+        else item.classList.remove('active');
+    });
+
+    updatePreview();
+}
+
+// ====================================
+// ЗАЩИТА УРОКОВ (БЛОКИРОВКА)
+// ====================================
+
+function checkAccessAndLock() {
+    let hasAccess = localStorage.getItem('tjcode_paid');
+
+    // Проверяем ключ в URL
     if (!hasAccess) {
         const urlParams = new URLSearchParams(window.location.search);
         const keyFromUrl = urlParams.get('key');
         
-        // Если ключ правильный - даём доступ
         if (keyFromUrl && SECRET_KEYS.includes(keyFromUrl)) {
             localStorage.setItem('tjcode_paid', 'true');
             hasAccess = 'true';
             
-            // Убираем ключ из адресной строки (чтобы не светился)
             const cleanUrl = window.location.pathname;
             window.history.replaceState({}, document.title, cleanUrl);
             
-            // Показываем сообщение (можно убрать, если мешает)
             setTimeout(() => alert('✅ Доступ открыт! Все 5 уроков теперь доступны'), 500);
         }
     }
     
-    // Теперь блокируем или разблокируем уроки
+    // Блокируем или разблокируем уроки визуально
     const lessonItems = document.querySelectorAll('.lesson-item');
     
-    for (let i = 1; i < TOTAL_LESSONS; i++) { // i=1, потому что урок 1 оставляем бесплатным
+    for (let i = 1; i < TOTAL_LESSONS; i++) {
         if (lessonItems[i]) {
             if (!hasAccess) {
-                // Нет доступа - блокируем
                 lessonItems[i].classList.add('locked');
                 lessonItems[i].style.pointerEvents = 'none';
                 lessonItems[i].style.opacity = '0.6';
                 
-                // Добавляем иконку замка, если её нет
                 if (!lessonItems[i].querySelector('.lock-icon')) {
                     const lockSpan = document.createElement('span');
                     lockSpan.className = 'lock-icon';
@@ -63,12 +137,10 @@ function checkAccessAndLock() {
                     lessonItems[i].querySelector('h3')?.appendChild(lockSpan);
                 }
             } else {
-                // Есть доступ - разблокируем
                 lessonItems[i].classList.remove('locked');
                 lessonItems[i].style.pointerEvents = 'auto';
                 lessonItems[i].style.opacity = '1';
                 
-                // Убираем замок
                 const lockIcon = lessonItems[i].querySelector('.lock-icon');
                 if (lockIcon) lockIcon.remove();
             }
@@ -76,38 +148,54 @@ function checkAccessAndLock() {
     }
 }
 
-// 3. Переопределяем функцию showLesson для защиты
-const originalShowLesson = window.showLesson;
-window.showLesson = function(lessonNumber) {
-    // Проверяем доступ, если урок не первый
-    if (lessonNumber > 1) {
-        const hasAccess = localStorage.getItem('tjcode_paid');
-        if (!hasAccess) {
-            alert('🔒 Этот урок доступен только после оплаты курса. Перейдите в блок "Купить курс"!');
-            return; // Не показываем урок
-        }
-    }
-    // Если доступ есть или урок первый - показываем
-    if (originalShowLesson) {
-        originalShowLesson(lessonNumber);
-    }
-};
+// ====================================
+// СЧЁТЧИК МЕСТ
+// ====================================
 
-// 4. Запускаем проверку при загрузке страницы
+function updatePlacesCounter() {
+    const total = 10;
+    let sold = parseInt(localStorage.getItem('tjcode_sold') || '0');
+    let remaining = Math.max(total - sold, 0);
+    
+    const counterEl = document.getElementById('placesCounter');
+    if (counterEl) counterEl.textContent = remaining;
+    
+    const progressBar = document.getElementById('progressBar');
+    if (progressBar) {
+        progressBar.style.width = (remaining / total) * 100 + '%';
+    }
+}
+
+function markAsSold() {
+    let sold = parseInt(localStorage.getItem('tjcode_sold') || '0');
+    localStorage.setItem('tjcode_sold', sold + 1);
+    updatePlacesCounter();
+}
+
+// ====================================
+// ЗАПУСК ПРИ ЗАГРУЗКЕ
+// ====================================
+
 document.addEventListener('DOMContentLoaded', function() {
     checkAccessAndLock();
+    updatePlacesCounter();
     
-    // Обновляем счётчик мест (если есть)
-    if (typeof updatePlacesCounter === 'function') {
-        updatePlacesCounter();
-    }
+    // Показываем первый урок
+    showLesson(1);
 });
 
-// 5. Функция для сброса (можешь вызвать в консоли для теста)
+// Автообновление редактора
+document.getElementById('htmlCode')?.addEventListener('input', function() {
+    clearTimeout(window.updateTimeout);
+    window.updateTimeout = setTimeout(updatePreview, 500);
+});
+
+// Функция для сброса (для теста)
 window.resetAccess = function() {
     localStorage.removeItem('tjcode_paid');
     checkAccessAndLock();
-    alert('🔄 Доступ сброшен. Обнови страницу.');
+    showLesson(1);
+    alert('🔄 Доступ сброшен');
 };
 
 console.log('✅ Система защиты уроков активна!');
