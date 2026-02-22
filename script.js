@@ -114,11 +114,6 @@ function showLesson(lessonNumber) {
 
 function sendTelegramNotification(key, userAgent) {
     // Если токен не настроен, просто выходим
-    if (TELEGRAM_TOKEN === '8493307801:AAEhUnRV1e47NUhI3NWoGkeYWkd4hi5uNJg' || TELEGRAM_CHAT_ID === '6337391749') {
-        console.log('Telegram не настроен. Уведомление не отправлено.');
-        return;
-    }
-
     const message = `🔥 <b>Новый вход по ключу!</b>
 🔑 Ключ: ${key}
 🌐 Браузер: ${userAgent}
@@ -257,5 +252,6 @@ window.testNotification = function() {
 };
 
 console.log('✅ Система защиты уроков активна!');
+
 
 
