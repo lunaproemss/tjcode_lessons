@@ -2,16 +2,25 @@
 // СИСТЕМА ПЛАТНОГО ДОСТУПА ДЛЯ TJ CODE
 // ====================================
 
+// ====================================
 // 1. НАСТРОЙКИ
+// ====================================
+
+// Секретные ключи доступа
 const SECRET_KEYS = [
     'tj2026-01', 'tj2026-02', 'tj2026-03', 'tj2026-04', 'tj2026-05',
     'tj2026-06', 'tj2026-07', 'tj2026-08', 'tj2026-09', 'tj2026-10',
     'tjcode-pro', 'html-master'
 ];
-const TOTAL_LESSONS = 5;
+
+// Настройки Telegram (ЗАМЕНИ НА СВОИ!)
+const TELEGRAM_TOKEN = '8269302769:AAEqTcYxPxm0vXHGBhOGlkstxmqDDEClFpM';      // токен бота от @BotFather
+const TELEGRAM_CHAT_ID = ' 6337391749';  // твой Chat ID от @userinfobot
+
+const TOTAL_LESSONS = 5; // Всего уроков
 
 // ====================================
-// ФУНКЦИИ УРОКОВ (ОСНОВНЫЕ)
+// 2. ФУНКЦИИ РЕДАКТОРА КОДА
 // ====================================
 
 function updatePreview() {
@@ -38,7 +47,10 @@ function updatePreview() {
     preview.srcdoc = styledHtml;
 }
 
-// ГЛАВНАЯ ФУНКЦИЯ ПОКАЗА УРОКОВ
+// ====================================
+// 3. ФУНКЦИЯ ПОКАЗА УРОКОВ
+// ====================================
+
 function showLesson(lessonNumber) {
     console.log('showLesson вызван для урока', lessonNumber);
     
@@ -97,7 +109,43 @@ function showLesson(lessonNumber) {
 }
 
 // ====================================
-// ЗАЩИТА УРОКОВ (БЛОКИРОВКА)
+// 4. УВЕДОМЛЕНИЯ В TELEGRAM
+// ====================================
+
+function sendTelegramNotification(key, userAgent) {
+    // Если токен не настроен, просто выходим
+    if (TELEGRAM_TOKEN === 'YOUR_TOKEN_HERE' || TELEGRAM_CHAT_ID === 'YOUR_CHAT_ID_HERE') {
+        console.log('Telegram не настроен. Уведомление не отправлено.');
+        return;
+    }
+
+    const message = `🔥 <b>Новый вход по ключу!</b>
+🔑 Ключ: ${key}
+🌐 Браузер: ${userAgent}
+⏰ Время: ${new Date().toLocaleString()}`;
+
+    fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            chat_id: TELEGRAM_CHAT_ID,
+            text: message,
+            parse_mode: 'HTML'
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.ok) {
+            console.log('✅ Уведомление в Telegram отправлено');
+        } else {
+            console.error('❌ Ошибка отправки в Telegram:', data);
+        }
+    })
+    .catch(error => console.error('❌ Ошибка:', error));
+}
+
+// ====================================
+// 5. ЗАЩИТА УРОКОВ
 // ====================================
 
 function checkAccessAndLock() {
@@ -112,6 +160,10 @@ function checkAccessAndLock() {
             localStorage.setItem('tjcode_paid', 'true');
             hasAccess = 'true';
             
+            // Отправляем уведомление в Telegram
+            sendTelegramNotification(keyFromUrl, navigator.userAgent);
+            
+            // Убираем ключ из адресной строки
             const cleanUrl = window.location.pathname;
             window.history.replaceState({}, document.title, cleanUrl);
             
@@ -149,7 +201,7 @@ function checkAccessAndLock() {
 }
 
 // ====================================
-// СЧЁТЧИК МЕСТ
+// 6. СЧЁТЧИК МЕСТ
 // ====================================
 
 function updatePlacesCounter() {
@@ -173,14 +225,12 @@ function markAsSold() {
 }
 
 // ====================================
-// ЗАПУСК ПРИ ЗАГРУЗКЕ
+// 7. ЗАПУСК ПРИ ЗАГРУЗКЕ
 // ====================================
 
 document.addEventListener('DOMContentLoaded', function() {
     checkAccessAndLock();
     updatePlacesCounter();
-    
-    // Показываем первый урок
     showLesson(1);
 });
 
@@ -190,12 +240,20 @@ document.getElementById('htmlCode')?.addEventListener('input', function() {
     window.updateTimeout = setTimeout(updatePreview, 500);
 });
 
-// Функция для сброса (для теста)
+// ====================================
+// 8. ФУНКЦИИ ДЛЯ ТЕСТИРОВАНИЯ
+// ====================================
+
 window.resetAccess = function() {
     localStorage.removeItem('tjcode_paid');
     checkAccessAndLock();
     showLesson(1);
     alert('🔄 Доступ сброшен');
+};
+
+window.testNotification = function() {
+    sendTelegramNotification('test-key', navigator.userAgent);
+    alert('✅ Тестовое уведомление отправлено (если токен настроен)');
 };
 
 console.log('✅ Система защиты уроков активна!');
