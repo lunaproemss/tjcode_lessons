@@ -15,7 +15,7 @@ const SECRET_KEYS = [
 
 // Настройки Telegram (ЗАМЕНИ НА СВОИ!)
 const TELEGRAM_TOKEN = '8269302769:AAEqTcYxPxm0vXHGBhOGlkstxmqDDEClFpM';      // токен бота от @BotFather
-const TELEGRAM_CHAT_ID = ' 6337391749';  // твой Chat ID от @userinfobot
+const TELEGRAM_CHAT_ID = '6337391749';  // твой Chat ID от @userinfobot
 
 const TOTAL_LESSONS = 5; // Всего уроков
 
@@ -114,7 +114,7 @@ function showLesson(lessonNumber) {
 
 function sendTelegramNotification(key, userAgent) {
     // Если токен не настроен, просто выходим
-    if (TELEGRAM_TOKEN === 'YOUR_TOKEN_HERE' || TELEGRAM_CHAT_ID === 'YOUR_CHAT_ID_HERE') {
+    if (TELEGRAM_TOKEN === '8269302769:AAEqTcYxPxm0vXHGBhOGlkstxmqDDEClFpM' || TELEGRAM_CHAT_ID === '6337391749') {
         console.log('Telegram не настроен. Уведомление не отправлено.');
         return;
     }
@@ -257,3 +257,4 @@ window.testNotification = function() {
 };
 
 console.log('✅ Система защиты уроков активна!');
+
